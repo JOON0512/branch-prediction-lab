@@ -1,0 +1,284 @@
+diff --git a/ce_challenge_2025/components/processors_ce_challenge.py b/ce_challenge_2025/components/processors_ce_challenge.py
+index fdb20fe41..cfdf96ba0 100755
+--- a/ce_challenge_2025/components/processors_ce_challenge.py
++++ b/ce_challenge_2025/components/processors_ce_challenge.py
+@@ -40,8 +40,9 @@ from m5.objects.BranchPredictor import *
+ ##### IT SHOULD STILL BE DECLARED AS MyCeChallengeBP BELOW AND #####
+ ##### CONNECT TO THE CeChallenge Core ##############################
+ ####################################################################
+-class MyCeChallengeBP(TournamentBP):
+-    localPredictorSize = 4096
++class MyCeChallengeBP(TageScImli128):
++    pass
++    
+ 
+ ####################################################################
+ ####################################################################
+@@ -162,231 +163,4 @@ class CeChallengeCPU(O3CPUCeChallengeBase):
+             num_lq_entries=num_lq_entries,
+             num_sq_entries=num_sq_entries,
+             bp_type=bp_type
+-        )
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
++        )
+\ No newline at end of file
+diff --git a/gem5/src/cpu/pred/BranchPredictor.py b/gem5/src/cpu/pred/BranchPredictor.py
+index 47b985242..fecf6a2d6 100644
+--- a/gem5/src/cpu/pred/BranchPredictor.py
++++ b/gem5/src/cpu/pred/BranchPredictor.py
+@@ -1130,3 +1130,8 @@ class MultiperspectivePerceptronTAGE8KB(MultiperspectivePerceptronTAGE):
+     tage = MPP_TAGE_8KB()
+     loop_predictor = MPP_LoopPredictor_8KB()
+     statistical_corrector = MPP_StatisticalCorrector_8KB()
++
++class TageScImli128(BranchPredictor):
++    type = "TageScImli128"
++    cxx_class = "gem5::branch_prediction::TageScImli128"
++    cxx_header = "cpu/pred/TageScImli128.hh"
+diff --git a/gem5/src/cpu/pred/SConscript b/gem5/src/cpu/pred/SConscript
+index 6c03dd8a1..3a6eb494d 100644
+--- a/gem5/src/cpu/pred/SConscript
++++ b/gem5/src/cpu/pred/SConscript
+@@ -58,7 +58,7 @@ SimObject('BranchPredictor.py',
+     'MultiperspectivePerceptronTAGE', 'MPP_StatisticalCorrector_64KB',
+     'MultiperspectivePerceptronTAGE64KB', 'MPP_TAGE_8KB',
+     'MPP_LoopPredictor_8KB', 'MPP_StatisticalCorrector_8KB',
+-    'MultiperspectivePerceptronTAGE8KB'],
++    'MultiperspectivePerceptronTAGE8KB', 'TageScImli128'],
+     enums=['BranchType', 'TargetProvider'])
+ 
+ Source('bpred_unit.cc')
+@@ -82,6 +82,7 @@ Source('statistical_corrector.cc')
+ Source('tage_sc_l.cc')
+ Source('tage_sc_l_8KB.cc')
+ Source('tage_sc_l_64KB.cc')
++Source('TageScImli128.cc')
+ Source('btb.cc')
+ Source('simple_btb.cc')
+ DebugFlag('Indirect')
